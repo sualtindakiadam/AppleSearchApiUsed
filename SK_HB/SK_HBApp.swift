@@ -11,7 +11,7 @@ import SwiftUI
 struct SK_HBApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: SongListViewModel())
         }
     }
 }

@@ -8,38 +8,112 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var selected = 1
+    
+    @ObservedObject var viewModel: SongListViewModel
+   
     var body: some View {
        
         VStack{
-            SearchBar()
-                      Picker(selection: $selected) {
-                Text("1").tag(1)
-                Text("2").tag(2)
-            } label: {
-                Text("Picker")
-            }
-            .pickerStyle(SegmentedPickerStyle())
-
-          
+            SearchBar(searchTerm: $viewModel.searchTerm)
+            SegmentedControlView()
             
-            if selected == 1 {
-                List(0..<5){ item in
-                    Text("item")
-                    
-                }
+            if viewModel.songs.isEmpty{
+                EmptyModelView()
             }else{
-                List(0..<10){ item in
-                    Text("item")
+                
+                List(viewModel.songs){song in
+                    SongView(song: song)
                     
                 }
+                .listStyle(PlainListStyle())
+
+              
+                
+               /* if selected == 1 {
+                    List(0..<5){ item in
+                        Text("item")
+                        
+                    }
+                }else{
+                    List(0..<10){ item in
+                        Text("item")
+                        
+                    }
+                }*/
+                
             }
+            
+            
+       
                
         }
     }
 }
 
+struct EmptyModelView: View{
+    var body: some View {
+     
 
+            Spacer()
+        Text("What do you want me to find for you ?")
+            .font(.caption)
+            Spacer()
+
+
+    }
+}
+
+struct SegmentedControlView: View{
+    @State var selected = 1
+    var body: some View{
+        Picker(selection: $selected) {
+            Text("Movies").tag(1)
+            Text("Music").tag(2)
+            Text("Apps").tag(3)
+            Text("Books").tag(4)
+        } label: {
+            Text("Picker")
+        }
+        .pickerStyle(SegmentedPickerStyle())
+        .padding(.horizontal, 9)
+    }
+}
+
+struct SongView: View{
+    @ObservedObject var song: SongViewModel
+    var body: some View{
+        HStack {
+          ArtworkView(image: song.artwork)
+            .padding(.trailing)
+          VStack(alignment: .leading) {
+            Text(song.trackName)
+            Text(song.artistName)
+              .font(.footnote)
+              .foregroundColor(.gray)
+          }
+        }
+        .padding()
+    }
+}
+
+struct ArtworkView: View{
+    let image: Image?
+    var body: some View{
+        ZStack{
+            if image != nil {
+                image
+            }else{
+                Color(.systemIndigo)
+                Image(systemName: "music.note")
+                    .font(.largeTitle)
+                    .shadow(radius: 5)
+                    .padding(.trailing, 5)
+            }
+        }
+        .frame(width: 50, height: 50 )
+        .foregroundColor(.white)
+    }
+}
 struct LoadingStateView : View {
     var body: some View{
         ProgressView()
@@ -53,7 +127,7 @@ struct LoadingStateView : View {
 struct SearchBar: UIViewRepresentable {
   typealias UIViewType = UISearchBar
   
-  //@Binding var searchTerm: String
+  @Binding var searchTerm: String
 
   func makeUIView(context: Context) -> UISearchBar {
     let searchBar = UISearchBar(frame: .zero)
@@ -67,10 +141,10 @@ struct SearchBar: UIViewRepresentable {
   }
   
   func makeCoordinator() -> SearchBarCoordinator {
-    return SearchBarCoordinator(/*searchTerm: $searchTerm*/)
+    return SearchBarCoordinator(searchTerm: $searchTerm)
   }
   
-  class SearchBarCoordinator: NSObject, UISearchBarDelegate {/*
+  class SearchBarCoordinator: NSObject, UISearchBarDelegate {
     @Binding var searchTerm: String
     
     init(searchTerm: Binding<String>) {
@@ -80,12 +154,12 @@ struct SearchBar: UIViewRepresentable {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
       searchTerm = searchBar.text ?? ""
       UIApplication.shared.windows.first { $0.isKeyWindow }?.endEditing(true)
-    }*/
+    }
   }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(viewModel: SongListViewModel())
     }
 }
