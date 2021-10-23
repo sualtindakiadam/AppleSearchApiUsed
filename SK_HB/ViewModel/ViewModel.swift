@@ -9,9 +9,10 @@ import Combine
 import Foundation
 import SwiftUI
 
-class SongListViewModel: ObservableObject {
-  @Published var searchTerm: String = ""
-  @Published public private(set) var songs: [SongViewModel] = []
+class SearchDataListViewModel: ObservableObject {
+    @Published var searchTerm: String = ""
+    @Published var searchType: String = ""
+  @Published public private(set) var songs: [SearchDataViewModel] = []
   
   private let dataModel: DataModel = DataModel()
   private let artworkLoader: ArtworkLoader = ArtworkLoader()
@@ -19,21 +20,22 @@ class SongListViewModel: ObservableObject {
   
   init() {
     $searchTerm
-      .sink(receiveValue: loadSongs(searchTerm:))
-      .store(in: &disposables)
+    //$searchType
+          .sink(receiveValue: loadSongs(searchTerm:))
+        .store(in: &disposables)
   }
   
-  private func loadSongs(searchTerm: String) {
+    private func loadSongs(searchTerm: String /*, searchType: String*/) {
     songs.removeAll()
     artworkLoader.reset()
-    
-    dataModel.loadSongs(searchTerm: searchTerm) { songs in
+        print(searchType)
+        dataModel.loadSongs(searchTerm: searchTerm, searchType: searchType ) { songs in
       songs.forEach { self.appendSong(song: $0) }
     }
   }
   
   private func appendSong(song: Song) {
-    let songViewModel = SongViewModel(song: song)
+    let songViewModel = SearchDataViewModel(song: song)
     DispatchQueue.main.async {
       self.songs.append(songViewModel)
     }
@@ -46,7 +48,7 @@ class SongListViewModel: ObservableObject {
   }
 }
 
-class SongViewModel: Identifiable, ObservableObject {
+class SearchDataViewModel: Identifiable, ObservableObject {
   let id: Int
   let trackName: String
   let artistName: String

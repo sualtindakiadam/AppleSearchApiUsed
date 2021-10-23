@@ -9,14 +9,15 @@
 
 
 import Foundation
+import SwiftUI
 
 class DataModel {
   
   private var dataTask: URLSessionDataTask?
   
-  func loadSongs(searchTerm: String, completion: @escaping(([Song]) -> Void)) {
+    func loadSongs(searchTerm: String,searchType: String, completion: @escaping(([Song]) -> Void)) {
     dataTask?.cancel()
-    guard let url = buildUrl(forTerm: searchTerm) else {
+        guard let url = buildUrl(forTerm: searchTerm, forMedia: searchType ) else {
       completion([])
       return
     }
@@ -34,12 +35,12 @@ class DataModel {
     dataTask?.resume()
   }
   
-  private func buildUrl(forTerm searchTerm: String) -> URL? {
+    private func buildUrl(forTerm searchTerm: String, forMedia searctType:String) -> URL? {
     guard !searchTerm.isEmpty else { return nil }
     
     let queryItems = [
       URLQueryItem(name: "term", value: searchTerm),
-      URLQueryItem(name: "entity", value: "song"),
+      URLQueryItem(name: "media", value: searctType),
     ]
     var components = URLComponents(string: "https://itunes.apple.com/search")
     components?.queryItems = queryItems
@@ -65,11 +66,18 @@ struct Song: Decodable {
   let trackName: String
   let artistName: String
   let artworkUrl: String
+   /* let collectionPrice: String
+    let collectionName: String
+    let releaseDate: String*/
+    
   
   enum CodingKeys: String, CodingKey {
     case id = "trackId"
     case trackName
     case artistName
     case artworkUrl = "artworkUrl60"
+      /*case collectionPrice
+      case collectionName
+      case releaseDate*/
   }
 }
