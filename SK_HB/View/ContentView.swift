@@ -12,7 +12,7 @@ struct ContentView: View {
     @ObservedObject var searchDataListViewModel: SearchDataListViewModel
 
     var body: some View {
-       
+        NavigationView{
         VStack{
             SearchBar(searchTerm: $searchDataListViewModel.searchTerm, searchType: $searchDataListViewModel.searchType)
             SegmentedControlView(searchType: $searchDataListViewModel.searchType)
@@ -23,12 +23,17 @@ struct ContentView: View {
                 ListView(searchDataListViewModel: searchDataListViewModel)
             }
         }
+        .navigationBarHidden(true)
+        .navigationTitle("")
+        }
+        
     }
 }
 
 struct ListView: View {
     @ObservedObject var searchDataListViewModel: SearchDataListViewModel
     var body: some View{
+       
         VStack{
     
             Text("\(String(searchDataListViewModel.songs.count)) results found for you")
@@ -36,12 +41,17 @@ struct ListView: View {
                 .font(.subheadline)
             
             List(searchDataListViewModel.songs){song in
-            SongView(song: song)
+                
+                NavigationLink(destination: DetailsView()) {
+                    SongView(song: song)
+                }
+           
             
             }
         }
         
     }
+    
 }
 
 
@@ -108,7 +118,7 @@ struct SegmentedControlView: View{
         })
         .pickerStyle(SegmentedPickerStyle())
         .padding(.horizontal, 9)
-        Text("asd")
+        
        
     }
 }
@@ -160,11 +170,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-/*struct LoadingStateView : View {
-    var body: some View{
-        ProgressView()
-            .progressViewStyle(CircularProgressViewStyle(tint: .red))
-            .scaleEffect(2)
-        
-    }
-}*/

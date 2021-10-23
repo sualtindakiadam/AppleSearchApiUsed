@@ -34,7 +34,7 @@ class SearchDataListViewModel: ObservableObject {
     }
   }
   
-  private func appendSong(song: Song) {
+  private func appendSong(song: searchedData) {
     let songViewModel = SearchDataViewModel(song: song)
     DispatchQueue.main.async {
       self.songs.append(songViewModel)
@@ -54,7 +54,7 @@ class SearchDataViewModel: Identifiable, ObservableObject {
   let artistName: String
   @Published var artwork: Image?
   
-  init(song: Song) {
+  init(song: searchedData) {
     self.id = song.id
     self.trackName = song.trackName
     self.artistName = song.artistName

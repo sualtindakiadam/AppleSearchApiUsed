@@ -15,7 +15,7 @@ class DataModel {
   
   private var dataTask: URLSessionDataTask?
   
-    func loadSongs(searchTerm: String,searchType: String, completion: @escaping(([Song]) -> Void)) {
+    func loadSongs(searchTerm: String,searchType: String, completion: @escaping(([searchedData]) -> Void)) {
     dataTask?.cancel()
         guard let url = buildUrl(forTerm: searchTerm, forMedia: searchType ) else {
       completion([])
@@ -54,14 +54,14 @@ class DataModel {
 }
 
 struct SongResponse: Decodable {
-  let songs: [Song]
+  let songs: [searchedData]
   
   enum CodingKeys: String, CodingKey {
     case songs = "results"
   }
 }
 
-struct Song: Decodable {
+struct searchedData: Decodable {
   let id: Int
   let trackName: String
   let artistName: String
