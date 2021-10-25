@@ -42,7 +42,7 @@ struct ListView: View {
             
             List(searchDataListViewModel.songs){song in
                 
-                NavigationLink(destination: DetailsView()) {
+                NavigationLink(destination: DetailsView(searchDataViewModel: song)) {
                     SongView(song: song)
                 }
            
@@ -148,21 +148,32 @@ struct SearchBar: UIViewRepresentable {
   
   class SearchBarCoordinator: NSObject, UISearchBarDelegate {
     @Binding var searchTerm: String
-      @Binding var searchType: String
+    
     
       init(searchTerm: Binding<String>, searchType: Binding<String>) {
       self._searchTerm = searchTerm
-          self._searchType = searchType
+        
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchType = searchType
-      searchTerm = searchBar.text ?? ""
+        
+        
+        if searchBar.text?.count ?? 0 > 1{
+            searchTerm = searchBar.text ?? ""
+    
+        }
+        
+      
        
       UIApplication.shared.windows.first { $0.isKeyWindow }?.endEditing(true)
     }
+        
   }
 }
+
+
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
