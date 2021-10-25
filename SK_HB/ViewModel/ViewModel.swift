@@ -50,14 +50,16 @@ class SearchDataListViewModel: ObservableObject {
 
 class SearchDataViewModel: Identifiable, ObservableObject {
   let id: Int
-  let trackName: String
-  let artistName: String
+  let collectionName: String
+  let collectionPrice: Float
+    let releaseDate: String
   @Published var artwork: Image?
   
   init(song: searchedData) {
     self.id = song.id
-    self.trackName = song.trackName
-    self.artistName = song.artistName
+    self.collectionName = song.collectionName
+    self.collectionPrice = song.collectionPrice
+      self.releaseDate = song.releaseDate
   }
 }
 

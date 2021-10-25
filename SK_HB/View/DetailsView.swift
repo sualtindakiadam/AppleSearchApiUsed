@@ -12,7 +12,7 @@ struct DetailsView: View {
     var searchDataViewModel: SearchDataViewModel?
     
     var body: some View {
-        Text(searchDataViewModel?.trackName ?? "asd")
+        Text(searchDataViewModel?.collectionName ?? "asd")
     }
 }
 

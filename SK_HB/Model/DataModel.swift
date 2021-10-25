@@ -63,8 +63,9 @@ struct SongResponse: Decodable {
 
 struct searchedData: Decodable {
   let id: Int
-  let trackName: String
-  let artistName: String
+  let collectionName: String
+  let collectionPrice: Float
+  let releaseDate: String
   let artworkUrl: String
    /* let collectionPrice: String
     let collectionName: String
@@ -73,9 +74,10 @@ struct searchedData: Decodable {
   
   enum CodingKeys: String, CodingKey {
     case id = "trackId"
-    case trackName
-    case artistName
-    case artworkUrl = "artworkUrl60"
+    case collectionName
+    case collectionPrice
+    case releaseDate
+    case artworkUrl = "artworkUrl100"
       /*case collectionPrice
       case collectionName
       case releaseDate*/

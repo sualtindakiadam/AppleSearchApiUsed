@@ -62,11 +62,12 @@ struct SongView: View{
           ArtworkView(image: song.artwork)
             .padding(.trailing)
           VStack(alignment: .leading) {
-            Text(song.trackName)
-            Text(song.artistName)
+            Text(song.collectionName)
+            Text(String(song.collectionPrice))
+              Text(song.releaseDate)
               .font(.footnote)
               .foregroundColor(.gray)
-          }
+          }.padding()
         }
         .padding()
     }
