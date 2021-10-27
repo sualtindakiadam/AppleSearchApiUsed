@@ -64,8 +64,13 @@ struct DataView: View{
           VStack(alignment: .leading) {
               
               Text((data.collectionName ?? data.trackName) ?? "")
-              Text("\(String(data.collectionPrice ?? data.price ?? 0)) \(data.currency ?? "")")
-              Text(data.releaseDate ?? "")
+              
+              if let price = (data.collectionPrice ?? data.price ?? 0){
+                  Text(price == 0.00 ?  "Free" : String(price))
+              }
+              
+              //Text("\(String(data.collectionPrice ?? data.price ?? 0)) \(data.currency ?? "")")
+              Text(data.releaseDate?.prefix(10) ?? "")
               .font(.footnote)
               .foregroundColor(.gray)
           }.padding()

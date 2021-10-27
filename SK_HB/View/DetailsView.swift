@@ -10,21 +10,27 @@ import SwiftUI
 struct DetailsView: View {
     
     var searchDataViewModel: SearchDataViewModel?
-    
+        
     var body: some View {
+        
         VStack{
             Text(searchDataViewModel?.collectionName ?? searchDataViewModel?.trackName ?? "")
             BigArtworkView(image: searchDataViewModel?.artwork100)
             HStack{
                 Text("\(String(searchDataViewModel?.collectionPrice ?? searchDataViewModel?.price ?? 0)) \(searchDataViewModel?.currency ?? "")")
                 Spacer()
-                Text(searchDataViewModel?.releaseDate ?? "")
+                Text(searchDataViewModel?.releaseDate?.prefix(10) ?? "")
+                   
             }
+            
+         
             
         }
         .padding()
     }
 }
+
+ 
 
 struct BigArtworkView: View{
     
