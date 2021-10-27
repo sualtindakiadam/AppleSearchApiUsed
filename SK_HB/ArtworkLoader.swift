@@ -11,8 +11,8 @@ import SwiftUI
 class ArtworkLoader {
   private var dataTasks: [URLSessionDataTask] = []
   
-  func loadArtwork(forSong song: searchedData, completion: @escaping((Image?) -> Void)) {
-    guard let imageUrl = URL(string: song.artworkUrl) else {
+  func loadArtwork(forData song: searchedData, completion: @escaping((Image?) -> Void)) {
+    guard let imageUrl = URL(string: song.artworkUrl100) else {
       completion(nil)
       return
     }

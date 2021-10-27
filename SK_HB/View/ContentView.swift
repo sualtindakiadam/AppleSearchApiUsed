@@ -17,7 +17,7 @@ struct ContentView: View {
             SearchBar(searchTerm: $searchDataListViewModel.searchTerm, searchType: $searchDataListViewModel.searchType)
             SegmentedControlView(searchType: $searchDataListViewModel.searchType)
             
-            if searchDataListViewModel.songs.isEmpty{
+            if searchDataListViewModel.datas.isEmpty{
                 EmptyModelView()
             }else{
                 ListView(searchDataListViewModel: searchDataListViewModel)
@@ -36,14 +36,14 @@ struct ListView: View {
        
         VStack{
     
-            Text("\(String(searchDataListViewModel.songs.count)) results found for you")
+            Text("\(String(searchDataListViewModel.datas.count)) results found for you")
                 .frame( height: 20)
                 .font(.subheadline)
             
-            List(searchDataListViewModel.songs){song in
+            List(searchDataListViewModel.datas){data in
                 
-                NavigationLink(destination: DetailsView(searchDataViewModel: song)) {
-                    SongView(song: song)
+                NavigationLink(destination: DetailsView(searchDataViewModel: data)) {
+                    DataView(data: data)
                 }
            
             
@@ -55,16 +55,17 @@ struct ListView: View {
 }
 
 
-struct SongView: View{
-    @ObservedObject var song: SearchDataViewModel
+struct DataView: View{
+    @ObservedObject var data: SearchDataViewModel
     var body: some View{
         HStack {
-          ArtworkView(image: song.artwork)
+          ArtworkView(image: data.artwork100)
             .padding(.trailing)
           VStack(alignment: .leading) {
-            Text(song.collectionName)
-            Text(String(song.collectionPrice))
-              Text(song.releaseDate)
+              
+              Text((data.collectionName ?? data.trackName) ?? "")
+              Text("\(String(data.collectionPrice ?? data.price ?? 0)) \(data.currency ?? "")")
+              Text(data.releaseDate ?? "")
               .font(.footnote)
               .foregroundColor(.gray)
           }.padding()
@@ -81,10 +82,7 @@ struct ArtworkView: View{
                 image
             }else{
                 Color(.systemIndigo)
-                Image(systemName: "music.note")
-                    .font(.largeTitle)
-                    .shadow(radius: 5)
-                    .padding(.trailing, 5)
+             
             }
         }
         .frame(width: 50, height: 50 )

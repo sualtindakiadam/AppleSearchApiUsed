@@ -12,7 +12,7 @@ import SwiftUI
 class SearchDataListViewModel: ObservableObject {
     @Published var searchTerm: String = ""
     @Published var searchType: String = ""
-  @Published public private(set) var songs: [SearchDataViewModel] = []
+  @Published public private(set) var datas: [SearchDataViewModel] = []
   
   private let dataModel: DataModel = DataModel()
   private let artworkLoader: ArtworkLoader = ArtworkLoader()
@@ -21,28 +21,28 @@ class SearchDataListViewModel: ObservableObject {
   init() {
     $searchTerm
     //$searchType
-          .sink(receiveValue: loadSongs(searchTerm:))
+          .sink(receiveValue: loadDatas(searchTerm:))
         .store(in: &disposables)
   }
   
-    private func loadSongs(searchTerm: String /*, searchType: String*/) {
-    songs.removeAll()
+    private func loadDatas(searchTerm: String /*, searchType: String*/) {
+    datas.removeAll()
     artworkLoader.reset()
         print(searchType)
-        dataModel.loadSongs(searchTerm: searchTerm, searchType: searchType ) { songs in
-      songs.forEach { self.appendSong(song: $0) }
+        dataModel.loadDatas(searchTerm: searchTerm, searchType: searchType ) { datas in
+      datas.forEach { self.appendData(data: $0) }
     }
   }
   
-  private func appendSong(song: searchedData) {
-    let songViewModel = SearchDataViewModel(song: song)
+  private func appendData(data: searchedData) {
+    let dataViewModel = SearchDataViewModel(data: data)
     DispatchQueue.main.async {
-      self.songs.append(songViewModel)
+      self.datas.append(dataViewModel)
     }
     
-    artworkLoader.loadArtwork(forSong: song) { image in
+    artworkLoader.loadArtwork(forData: data) { image in
       DispatchQueue.main.async {
-        songViewModel.artwork = image
+        dataViewModel.artwork100 = image
       }
     }
   }
@@ -50,16 +50,22 @@ class SearchDataListViewModel: ObservableObject {
 
 class SearchDataViewModel: Identifiable, ObservableObject {
   let id: Int
-  let collectionName: String
-  let collectionPrice: Float
-    let releaseDate: String
-  @Published var artwork: Image?
+  let collectionName: String?
+  let collectionPrice: Float?
+  let price: Float?
+  let releaseDate: String?
+  let trackName: String?
+    let currency: String?
+  @Published var artwork100: Image?
   
-  init(song: searchedData) {
-    self.id = song.id
-    self.collectionName = song.collectionName
-    self.collectionPrice = song.collectionPrice
-      self.releaseDate = song.releaseDate
+  init(data: searchedData) {
+    self.id = data.id
+    self.collectionName = data.collectionName
+    self.collectionPrice = data.collectionPrice
+      self.price = data.price
+      self.releaseDate = data.releaseDate
+      self.trackName = data.trackName
+      self.currency = data.currency
   }
 }
 

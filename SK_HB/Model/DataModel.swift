@@ -15,7 +15,7 @@ class DataModel {
   
   private var dataTask: URLSessionDataTask?
   
-    func loadSongs(searchTerm: String,searchType: String, completion: @escaping(([searchedData]) -> Void)) {
+    func loadDatas(searchTerm: String,searchType: String, completion: @escaping(([searchedData]) -> Void)) {
     dataTask?.cancel()
         guard let url = buildUrl(forTerm: searchTerm, forMedia: searchType ) else {
       completion([])
@@ -28,8 +28,8 @@ class DataModel {
         return
       }
       
-      if let songResponse = try? JSONDecoder().decode(SongResponse.self, from: data) {
-        completion(songResponse.songs)
+      if let dataResponse = try? JSONDecoder().decode(DataResponse.self, from: data) {
+        completion(dataResponse.datas)
       }
     }
     dataTask?.resume()
@@ -53,33 +53,36 @@ class DataModel {
   }
 }
 
-struct SongResponse: Decodable {
-  let songs: [searchedData]
+struct DataResponse: Decodable {
+  let datas: [searchedData]
   
   enum CodingKeys: String, CodingKey {
-    case songs = "results"
+    case datas = "results"
   }
 }
 
 struct searchedData: Decodable {
   let id: Int
-  let collectionName: String
-  let collectionPrice: Float
-  let releaseDate: String
-  let artworkUrl: String
-   /* let collectionPrice: String
-    let collectionName: String
-    let releaseDate: String*/
+  let collectionName: String?
+  let collectionPrice: Float?
+  let price: Float?
+  let releaseDate: String?
+  let artworkUrl100: String
+  let trackName: String?
+    let currency: String?
+
     
   
   enum CodingKeys: String, CodingKey {
     case id = "trackId"
     case collectionName
     case collectionPrice
+    case price
     case releaseDate
-    case artworkUrl = "artworkUrl100"
-      /*case collectionPrice
-      case collectionName
-      case releaseDate*/
+    case trackName
+      case currency
+    case artworkUrl100 = "artworkUrl100"
+  
+
   }
 }

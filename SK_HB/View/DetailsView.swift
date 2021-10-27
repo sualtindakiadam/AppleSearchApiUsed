@@ -12,7 +12,37 @@ struct DetailsView: View {
     var searchDataViewModel: SearchDataViewModel?
     
     var body: some View {
-        Text(searchDataViewModel?.collectionName ?? "asd")
+        VStack{
+            Text(searchDataViewModel?.collectionName ?? searchDataViewModel?.trackName ?? "")
+            BigArtworkView(image: searchDataViewModel?.artwork100)
+            HStack{
+                Text("\(String(searchDataViewModel?.collectionPrice ?? searchDataViewModel?.price ?? 0)) \(searchDataViewModel?.currency ?? "")")
+                Spacer()
+                Text(searchDataViewModel?.releaseDate ?? "")
+            }
+            
+        }
+        .padding()
+    }
+}
+
+struct BigArtworkView: View{
+    
+    let image: Image?
+
+    var body: some View{
+        VStack{
+            if image != nil {
+                image
+            }else{
+                Color(.systemIndigo)
+          
+            }
+        }
+        .frame(width: UIScreen.main.bounds.width-30, height: UIScreen.main.bounds.width-30 )
+        .foregroundColor(.white)
+        
+    
     }
 }
 
