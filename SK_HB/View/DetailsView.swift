@@ -13,9 +13,12 @@ struct DetailsView: View {
         
     var body: some View {
         
+        HStack{
+            ArtworkView(image: searchDataViewModel?.artwork100)
+                .padding()
         VStack{
             Text(searchDataViewModel?.collectionName ?? searchDataViewModel?.trackName ?? "")
-            BigArtworkView(image: searchDataViewModel?.artwork100)
+         
             HStack{
                 Text("\(String(searchDataViewModel?.collectionPrice ?? searchDataViewModel?.price ?? 0)) \(searchDataViewModel?.currency ?? "")")
                 Spacer()
@@ -26,31 +29,16 @@ struct DetailsView: View {
          
             
         }
+        .frame(height: 50)
+        .padding()
+        }
         .padding()
     }
 }
 
  
 
-struct BigArtworkView: View{
-    
-    let image: Image?
 
-    var body: some View{
-        VStack{
-            if image != nil {
-                image
-            }else{
-                Color(.systemIndigo)
-          
-            }
-        }
-        .frame(width: UIScreen.main.bounds.width-30, height: UIScreen.main.bounds.width-30 )
-        .foregroundColor(.white)
-        
-    
-    }
-}
 
 struct DetailsView_Previews: PreviewProvider {
     static var previews: some View {

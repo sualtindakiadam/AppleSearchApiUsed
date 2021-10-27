@@ -11,7 +11,7 @@ import SwiftUI
 
 class SearchDataListViewModel: ObservableObject {
     @Published var searchTerm: String = ""
-    @Published var searchType: String = ""
+    @Published var searchType: String = "movie"
   @Published public private(set) var datas: [SearchDataViewModel] = []
   
   private let dataModel: DataModel = DataModel()
