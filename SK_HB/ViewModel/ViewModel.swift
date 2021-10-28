@@ -20,12 +20,15 @@ class SearchDataListViewModel: ObservableObject {
   
   init() {
     $searchTerm
-    //$searchType
-          .sink(receiveValue: loadDatas(searchTerm:))
+    
+          .sink(receiveValue: loadDatasSearchTerm(searchTerm:))
+        .store(in: &disposables)
+      $searchType
+          .sink(receiveValue: loadDatasSearchType(searchType:))
         .store(in: &disposables)
   }
   
-    private func loadDatas(searchTerm: String /*, searchType: String*/) {
+    private func loadDatasSearchTerm(searchTerm: String /*, searchType: String*/) {
     datas.removeAll()
     artworkLoader.reset()
         print(searchType)
@@ -33,6 +36,16 @@ class SearchDataListViewModel: ObservableObject {
       datas.forEach { self.appendData(data: $0) }
     }
   }
+    
+    private func loadDatasSearchType(/*searchTerm: String ,*/ searchType: String) {
+    datas.removeAll()
+    artworkLoader.reset()
+        print(searchType)
+        dataModel.loadDatas(searchTerm: searchTerm, searchType: searchType ) { datas in
+      datas.forEach { self.appendData(data: $0) }
+    }
+  }
+
   
   private func appendData(data: searchedData) {
     let dataViewModel = SearchDataViewModel(data: data)

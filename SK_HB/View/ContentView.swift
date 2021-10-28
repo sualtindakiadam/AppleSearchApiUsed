@@ -20,7 +20,9 @@ struct ContentView: View {
             if searchDataListViewModel.datas.isEmpty{
                 EmptyModelView()
             }else{
-                ListView(searchDataListViewModel: searchDataListViewModel)
+                //ListView(searchDataListViewModel: searchDataListViewModel)
+                ListPaginationThresholdExampleView(searchDataListViewModel: searchDataListViewModel)
+                
             }
         }
         .navigationBarHidden(true)
@@ -45,14 +47,107 @@ struct ListView: View {
                 NavigationLink(destination: DetailsView(searchDataViewModel: data)) {
                     DataView(data: data)
                 }
-           
-            
             }
         }
-        
     }
-    
 }
+
+
+
+extension String: Identifiable {
+    public var id: String {
+        return self
+    }
+}
+
+struct ListPaginationThresholdExampleView: View {
+    @ObservedObject var searchDataListViewModel: SearchDataListViewModel
+
+    
+    
+    //@State private var items: [String] = Array(0...24).map { "Item \($0)" }
+    @State private var isLoading: Bool = false
+    @State private var page: Int = 0
+    
+    private let pageSize: Int = 20
+    private let offset: Int = 10
+    
+    var body: some View {
+        NavigationView {
+            List(searchDataListViewModel.datas) { data in
+                VStack(alignment: .leading) {
+                    //Text("asd")
+                    
+                    NavigationLink(destination: DetailsView(searchDataViewModel: data)) {
+                        DataView(data: data)
+                    }
+                    
+                    if self.isLoading && (data.id) == 0 {
+                        Divider()
+                        Text("Loading ...")
+                            .padding(.vertical)
+                    }
+                }.onAppear {
+                    self.listItemAppears(data)
+                }
+            }
+            .navigationBarHidden(true)
+         
+        }
+    }
+}
+
+extension ListPaginationThresholdExampleView {
+    private func listItemAppears<Item: Identifiable>(_ item: Item) {
+        if true {
+            isLoading = true
+            
+            /*
+                Simulated async behaviour:
+                Creates items for the next page and
+                appends them to the list after a short delay
+             */
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                self.page += 1
+                //let moreItems = self.getMoreItems(forPage: self.page, pageSize: self.pageSize)
+                //self.items.append(contentsOf: moreItems)
+                
+                self.isLoading = false
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 struct DataView: View{
