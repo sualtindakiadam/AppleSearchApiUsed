@@ -20,8 +20,8 @@ struct ContentView: View {
             if searchDataListViewModel.datas.isEmpty{
                 EmptyModelView()
             }else{
-                //ListView(searchDataListViewModel: searchDataListViewModel)
-                ListPaginationThresholdExampleView(searchDataListViewModel: searchDataListViewModel)
+                ListView(searchDataListViewModel: searchDataListViewModel)
+                //ListPaginationThresholdExampleView(searchDataListViewModel: searchDataListViewModel)
                 
             }
         }
@@ -52,7 +52,7 @@ struct ListView: View {
     }
 }
 
-
+/*
 
 extension String: Identifiable {
     public var id: String {
@@ -118,37 +118,7 @@ extension ListPaginationThresholdExampleView {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 struct DataView: View{
     @ObservedObject var data: SearchDataViewModel
